@@ -9,7 +9,11 @@ import math
 import collections
 from collections import defaultdict
 
-#function to determine if coverage met
+'''
+coverageMet
+checks if the coverage of all the sequences are met by checking
+against the fold
+'''
 def coverageMet(coverage, fold):
 	i = 0
 	met = True
@@ -19,7 +23,12 @@ def coverageMet(coverage, fold):
 		i += 1
 	return met
 
-#function to determine overlap
+'''
+overlap
+determines if there is overlap and then determines where the overlap is
+by iterating through the fragments then from the largest to the smallest 
+possible overlap 
+'''
 def overlap (numFrag,frags):
 	for i in range(0,numFrag-1):
 		for j in range(i+1, numFrag):
@@ -30,17 +39,14 @@ def overlap (numFrag,frags):
 			frag1 = frags[i]
 			frag2 = frags[j]
 			k = (minLen - 1)
+			#starting from the highest number of overlap to lowest possible overlap 
 			while (k >= 1 and overlap == 0):
 				#comapring suffix of frag1 to prefix of frag2
-				print "frag1", frag1
-				print "frag1S", frag1[f1Len-k: f1Len]
-				print "frag1P",frag1[0:k]
-				if (frag1[f1Len-k: f1Len] == frag2[0:k]):
+				if (frag1[f1Len-k: f1Len] == frag2[0:k] and not frag1[0:k] in frag2):
 					contig = (frag1[0:f1Len-k])+frag2
 					overlap = k
-					print frag1, frag2, contig, overlap
-				
-				elif (frag2[f2Len-k:f2Len]==frag1[0:k] and frag2[f2Len-k:f2Len] not in frag1[0:k]):
+					print frag1, frag2, contig, overlap				
+				elif (frag2[f2Len-k:f2Len]==frag1[0:k] and frag1[f1Len-k: f1Len] not in frag2):
 					contig = frag2[0:f2Len-k] +frag1
 					overlap = k
 					print frag1, frag2, contig, overlap
@@ -69,8 +75,7 @@ while (coverageMet(coverage, cFold) == False):
 	for i in range(randS, randS+randL -1):
 		coverage[i] += 1
 
-if "ATG" in "ACTAT":
-	print "yes"
+
 #step 2: determine overlap
 overlap(numFrag,frags)
 	
