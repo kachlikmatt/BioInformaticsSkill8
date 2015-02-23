@@ -30,6 +30,7 @@ by iterating through the fragments then from the largest to the smallest
 possible overlap 
 '''
 def overlap (numFrag,frags):
+	contig = ""
 	for i in range(0,numFrag-1):
 		for j in range(i+1, numFrag):
 			f1Len = len(frags[i])
@@ -41,15 +42,16 @@ def overlap (numFrag,frags):
 			k = (minLen - 1)
 			#starting from the highest number of overlap to lowest possible overlap 
 			while (k >= 1 and overlap == 0):
-				#comapring suffix of frag1 to prefix of frag2
-				if (frag1[f1Len-k: f1Len] == frag2[0:k] and not frag1[0:k] in frag2):
-					contig = (frag1[0:f1Len-k])+frag2
-					overlap = k
-					print frag1, frag2, contig, overlap				
-				elif (frag2[f2Len-k:f2Len]==frag1[0:k] and frag1[f1Len-k: f1Len] not in frag2):
-					contig = frag2[0:f2Len-k] +frag1
-					overlap = k
-					print frag1, frag2, contig, overlap
+				#comparing suffix of frag1 to prefix of frag2
+				if (frag1[f1Len-k: f1Len] == frag2[0:k]):
+						contig = frag1[0:f1Len-k] +frag2
+						overlap = k
+						print frag1, frag2, contig, overlap			
+				elif (frag2[f2Len-k:f2Len]==frag1[0:k]):
+						contig = frag2[0:f2Len-k] +frag1
+						overlap = k
+						print frag1, frag2, contig, overlap
+
 				k -= 1
 					
 					
@@ -58,24 +60,26 @@ data = raw_input('seq?')
 seq = data
 minimum = 3
 maximum = 5
-cFold = 3
+cFold = 1
 coverage =  collections.defaultdict(int)
 for i in range(0,len(seq)-1):
 	coverage[i] = 0
 
 #step #1: Generate a set fragments from the input seq
 numFrag = 0
-frags = collections.defaultdict(str)
+frags = []
 while (coverageMet(coverage, cFold) == False): 
 	randL = randint(minimum,maximum)
 	randS = randint(0,len(seq)-randL)
-	frags[numFrag] = seq[randS:randS+randL]
-	numFrag += 1
-	#update coverage
-	for i in range(randS, randS+randL -1):
-		coverage[i] += 1
+	newF = seq[randS:randS+randL]
+	if  all(newF not in frags for frags in newF) and all(frag not in newF for frag in frags):
+		frags.append(seq[randS:randS+randL])
+		numFrag += 1
+		#update coverage
+		for i in range(randS, randS+randL -1):
+			coverage[i] += 1
 
-
+print frags
 #step 2: determine overlap
 overlap(numFrag,frags)
 	
