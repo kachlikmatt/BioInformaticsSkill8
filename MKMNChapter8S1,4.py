@@ -30,7 +30,6 @@ by iterating through the fragments then from the largest to the smallest
 possible overlap 
 '''
 def overlap (numFrag,frags):
-	contig = ""
 	for i in range(0,numFrag-1):
 		for j in range(i+1, numFrag):
 			f1Len = len(frags[i])
@@ -58,10 +57,10 @@ def overlap (numFrag,frags):
 #input
 data = raw_input('seq?')
 seq = data
-minimum = 3
-maximum = 5
-cFold = 1
-coverage =  collections.defaultdict(int)
+minimum = int(raw_input("Whats the min of sequence?\n"))
+maximum = int(raw_input("Whats the max of sequence?\n"))
+cFold = int(raw_input("What is the coverage you would like?\n"))
+coverage = collections.defaultdict(int)
 for i in range(0,len(seq)-1):
 	coverage[i] = 0
 
